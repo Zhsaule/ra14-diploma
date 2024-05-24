@@ -1,14 +1,19 @@
 import {
   useEffect,
   useRef,
+  useContext,
   useState,
   FormEvent,
+  KeyboardEvent,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import SearchContext from '../contexts/SearchContext';
+
 const HeaderSearchPic = () => {
+  const { setSearchText } = useContext(SearchContext);
+  const [inputText, setInputText] = useState('');
   const [isHidden, setIsHidden] = useState(true);
-  const [searchText, setSearchText] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
@@ -18,24 +23,31 @@ const HeaderSearchPic = () => {
     }
   }, [isHidden]);
 
-  const handleClick = () => {
-    if (!isHidden && searchText.trim()) {
-      navigate(`/catalog?q=${searchText.trim()}`);
-      setSearchText('');
+  const performSearch = () => {
+    if (inputText.trim()) {
+      setSearchText(inputText);
+      navigate('/catalog');
       setIsHidden(true);
+    }
+  };
+
+  const handleClick = () => {
+    if (!isHidden) {
+      performSearch();
     } else {
-      setIsHidden(!isHidden);
+      setIsHidden(false);
     }
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (searchText.trim() === '') {
-      setIsHidden(true);
-    } else { // start search
-      navigate(`/catalog?q=${searchText.trim()}`);
-      setSearchText('');
-      setIsHidden(true);
+    performSearch();
+  };
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // предотвращаем отправку формы по Enter
+      performSearch();
     }
   };
 
@@ -56,15 +68,9 @@ const HeaderSearchPic = () => {
           placeholder="Поиск"
           ref={inputRef}
           name="search"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          onKeyPress={(event) => {
-            if (event.key === 'Enter' && searchText.trim()) {
-              navigate(`/catalog?q=${searchText.trim()}`);
-              setSearchText('');
-              setIsHidden(true);
-            }
-          }}
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
       </form>
     </>

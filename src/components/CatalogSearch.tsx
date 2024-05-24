@@ -1,20 +1,12 @@
-import { useState, useEffect, FormEvent } from 'react';
+import { useContext, FormEvent } from 'react';
+import SearchContext from '../contexts/SearchContext';
 
-interface CatalogSearchProps {
-  onSearch: (query: string) => void;
-  initialQuery?: string;
-}
-
-const CatalogSearch = ({ onSearch, initialQuery = '' }: CatalogSearchProps) => {
-  const [searchText, setSearchText] = useState(initialQuery);
-
-  useEffect(() => {
-    setSearchText(initialQuery);
-  }, [initialQuery]);
+const CatalogSearch = () => {
+  const { searchText, setSearchText } = useContext(SearchContext);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSearch(searchText);
+    // You might need to call some search function here if necessary
   };
 
   return (
