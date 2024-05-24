@@ -1,4 +1,4 @@
-const NotFoundPage = () => {
+function NotFoundPage() {
   return (
     <section className="catalog-item">
       <h1>404 - Страница не найдена</h1>

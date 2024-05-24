@@ -30,9 +30,16 @@ const Catalog = ({ url }: CatalogProps) => {
         setHasMore(false);
       }
       // setItems((prevItems) => [...prevItems, ...data]);!!!!
-      setItems((prevItems) => newOffset === 0 ? data : [...prevItems, ...data]);
+      // setItems((prevItems) => newOffset === 0 ? data : [...prevItems, ...data]);
+      setItems((prevItems) => {
+        if (newOffset === 0) {
+          return data;
+        }
+        return [...prevItems, ...data];
+      });
       setOffset(newOffset);
     } catch (error) {
+      // Используйте подходящий метод для обработки ошибок вместо console.error
       console.error('There was a problem with fetch operation:', error);
     } finally {
       setLoading(false);
@@ -52,7 +59,7 @@ const Catalog = ({ url }: CatalogProps) => {
 
   return (
     <div className='row'>
-      {items.map(item => (
+      {items.map((item) => (
         <div className='col-4' key={item.id}>
           <div className='card catalog-item-card'>
             <img className='card-img-top img-fluid' src={item.images[0]} alt={item.title} />

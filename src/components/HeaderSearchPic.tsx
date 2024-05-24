@@ -1,5 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useEffect,
+  useRef,
+  useState,
+  FormEvent,
+} from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const HeaderSearchPic = () => {
   const [isHidden, setIsHidden] = useState(true);
@@ -23,7 +28,7 @@ const HeaderSearchPic = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchText.trim() === '') {
       setIsHidden(true);
@@ -36,10 +41,14 @@ const HeaderSearchPic = () => {
 
   return (
     <>
-      <div id="search-expander" className="header-controls-pic header-controls-search" onClick={handleClick} />
+      <div
+        id="search-expander"
+        className="header-controls-pic header-controls-search"
+        onClick={handleClick}
+      />
       <form
         id="search-form"
-        className={`header-controls-search-form form-inline ${isHidden ? "invisible" : ""}`}
+        className={`header-controls-search-form form-inline ${isHidden ? 'invisible' : ''}`}
         onSubmit={handleSubmit}
       >
         <input
@@ -60,6 +69,6 @@ const HeaderSearchPic = () => {
       </form>
     </>
   );
-}
+};
 
 export default HeaderSearchPic;

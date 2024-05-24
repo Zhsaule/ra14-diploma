@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import Catalog from "../components/Catalog";
-import Categories from "../components/CatalogCategories";
+import Catalog from '../components/Catalog';
+import Categories from '../components/CatalogCategories';
 import CatalogSearch from '../components/CatalogSearch';
 
 const CatalogPage = () => {
@@ -23,16 +23,21 @@ const CatalogPage = () => {
     setSearchQuery(query);
   };
 
-  const catalogUrl = `${baseUrl}/items${selectedCategory ? `?categoryId=${selectedCategory}` : ''}${searchQuery ? `${selectedCategory ? '&' : '?'}q=${searchQuery}` : ''}`;
+  const catalogUrl = `${baseUrl}/items${
+    selectedCategory ? `?categoryId=${selectedCategory}` : ''
+  }${searchQuery ? `${selectedCategory ? '&' : '?'}q=${searchQuery}` : ''}`;
 
   return (
     <section>
       <h2 className="text-center">Каталог</h2>
       <CatalogSearch onSearch={handleSearch} initialQuery={searchQuery} />
-      <Categories onCategorySelect={handleCategorySelect} selectedCategoryId={selectedCategory} />
+      <Categories
+        onCategorySelect={handleCategorySelect}
+        selectedCategoryId={selectedCategory}
+      />
       <Catalog url={catalogUrl} />
     </section>
   );
-}
+};
 
 export default CatalogPage;

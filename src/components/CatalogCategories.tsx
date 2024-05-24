@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 interface Category {
   id: number;
@@ -33,19 +33,21 @@ const Categories = ({ onCategorySelect, selectedCategoryId }: CategoriesProps) =
   }, [baseUrl]);
 
   return (
-    <ul className="catalog-categories nav justify-content-center">
-      {categories.map(category => (
+    <ul className='catalog-categories nav justify-content-center'>
+      {categories.map((category) => (
         <li className='nav-item' key={category.id}>
-          <Link to={`#${category.id}`}
-               className={`nav-link ${selectedCategoryId === category.id ? 'active' : ''}`}
-               style={{ padding: 10 }}
-               onClick={() => onCategorySelect(category.id)}>
+          <Link
+            to={`#${category.id}`}
+            className={`nav-link ${selectedCategoryId === category.id ? 'active' : ''}`}
+            style={{ padding: 10 }}
+            onClick={() => onCategorySelect(category.id)}
+          >
             {category.title}
           </Link>
         </li>
       ))}
     </ul>
   );
-}
+};
 
 export default Categories;

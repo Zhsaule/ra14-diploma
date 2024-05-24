@@ -1,17 +1,16 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import Header from './components/Header'
-import Footer from './components/Footer'
+import Header from './components/Header';
+import Footer from './components/Footer';
 
-import MainPage from './pages/MainPage'
-import NotFoundPage from './pages/NotFoundPage'
-import Banner from './components/Banner'
-import CatalogPage from './pages/CatalogPage'
-import AboutPage from './pages/AboutPage'
-import ContactsPage from './pages/ContactsPage'
+import MainPage from './pages/MainPage';
+import NotFoundPage from './pages/NotFoundPage';
+import Banner from './components/Banner';
+import CatalogPage from './pages/CatalogPage';
+import AboutPage from './pages/AboutPage';
+import ContactsPage from './pages/ContactsPage';
 
 function App() {
-
   return (
     <BrowserRouter>
       <Header />
@@ -31,7 +30,7 @@ function App() {
       </main>
       <Footer />
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;

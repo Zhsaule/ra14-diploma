@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-const HeaderCartPic = () => {
+function HeaderCartPic() {
   const cartCount: number = 0;
 
   return (

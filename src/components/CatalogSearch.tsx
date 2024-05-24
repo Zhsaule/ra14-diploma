@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 
 interface CatalogSearchProps {
   onSearch: (query: string) => void;
@@ -12,7 +12,7 @@ const CatalogSearch = ({ onSearch, initialQuery = '' }: CatalogSearchProps) => {
     setSearchText(initialQuery);
   }, [initialQuery]);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     onSearch(searchText);
   };
