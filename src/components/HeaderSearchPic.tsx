@@ -5,15 +5,13 @@ import {
   useState,
   FormEvent,
   KeyboardEvent,
-  MouseEvent,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import SearchContext from '../contexts/SearchContext';
 
 const HeaderSearchPic = () => {
-  const { setSearchText } = useContext(SearchContext);
-  const [inputText, setInputText] = useState('');
+  const { searchText, setSearchText } = useContext(SearchContext);
+  const [inputText, setInputText] = useState(searchText);
   const [isHidden, setIsHidden] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
@@ -27,7 +25,7 @@ const HeaderSearchPic = () => {
   const performSearch = () => {
     if (inputText.trim()) {
       setSearchText(inputText);
-      navigate('/catalog');
+      navigate(`/catalog?q=${inputText}`);
       setInputText(''); // очищаем поле поиска после перехода
       setIsHidden(true);
     } else {
@@ -35,7 +33,7 @@ const HeaderSearchPic = () => {
     }
   };
 
-  const handleSearch = (event?: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement> | MouseEvent<HTMLDivElement>) => {
+  const handleSearch = (event?: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>) => {
     if (event) {
       event.preventDefault();
     }
