@@ -15,9 +15,12 @@ interface Item {
   images: string[];
 }
 
-const Catalog = () => {
-  const { searchText } = useContext(SearchContext);
-  const { categoryId } = useContext(SearchContext);
+interface CatalogProps {
+  url?: string;
+}
+
+const Catalog = ({ url }: CatalogProps) => {
+  const { searchText, categoryId } = useContext(SearchContext);
   const [items, setItems] = useState<Item[]>([]);
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -35,7 +38,9 @@ const Catalog = () => {
         params.append('categoryId', categoryId.toString());
       }
 
-      const response = await fetch(`${baseUrl}/items?${params.toString()}`);
+      const fetchUrl = url ? `${url}?${params.toString()}` : `${baseUrl}/items?${params.toString()}`;
+
+      const response = await fetch(fetchUrl);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -43,19 +48,14 @@ const Catalog = () => {
       if (data.length < 6) {
         setHasMore(false);
       }
-      setItems((prevItems) => {
-        if (newOffset === 0) {
-          return data;
-        }
-        return [...prevItems, ...data];
-      });
+      setItems((prevItems) => (newOffset === 0 ? data : [...prevItems, ...data]));
       setOffset(newOffset);
     } catch (error) {
       console.error('There was a problem with fetch operation:', error);
     } finally {
       setLoading(false);
     }
-  }, [baseUrl, searchText, categoryId]);
+  }, [baseUrl, searchText, categoryId, url]);
 
   useEffect(() => {
     setItems([]);

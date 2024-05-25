@@ -1,24 +1,23 @@
-import { useState } from 'react';
-
+import { useContext, useEffect } from 'react';
 import Catalog from '../components/Catalog';
 import Categories from '../components/CatalogCategories';
+import SearchContext from '../contexts/SearchContext';
 
 const MainPage = () => {
-  // Инициализация с "Все" как выбранной категорией
-  const [selectedCategory, setSelectedCategory] = useState(0);
+  const { setCategoryId } = useContext(SearchContext);
   const baseUrl = import.meta.env.VITE_API_URL;
 
-  const handleCategorySelect = (categoryId: number) => {
-    setSelectedCategory(categoryId);
-  };
+  useEffect(() => {
+    setCategoryId(0); // Сбросить выбранную категорию при загрузке главной страницы
+  }, [setCategoryId]);
 
   return (
     <section>
       <h2 className='text-center'>Хиты продаж!</h2>
       <Catalog url={`${baseUrl}/top-sales`} />
       <h2 className='text-center'>Каталог</h2>
-      <Categories onCategorySelect={handleCategorySelect} selectedCategoryId={selectedCategory} />
-      <Catalog url={`${baseUrl}/items${selectedCategory ? `?categoryId=${selectedCategory}` : ''}`} />
+      <Categories />
+      <Catalog/>
     </section>
   );
 };

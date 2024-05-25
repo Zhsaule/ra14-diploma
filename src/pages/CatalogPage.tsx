@@ -1,41 +1,27 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Catalog from '../components/Catalog';
 import Categories from '../components/CatalogCategories';
 import CatalogSearch from '../components/CatalogSearch';
+import SearchContext from '../contexts/SearchContext';
 
 const CatalogPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
-  const baseUrl = import.meta.env.VITE_API_URL;
+  const { setSearchText, setCategoryId } = useContext(SearchContext);
   const [searchParams] = useSearchParams();
+  const baseUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const q = searchParams.get('q') || '';
-    setSearchQuery(q);
-  }, [searchParams]);
-
-  const handleCategorySelect = (categoryId: number) => {
-    setSelectedCategory(categoryId);
-  };
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-  };
-
-  const catalogUrl = `${baseUrl}/items${
-    selectedCategory ? `?categoryId=${selectedCategory}` : ''
-  }${searchQuery ? `${selectedCategory ? '&' : '?'}q=${searchQuery}` : ''}`;
+    setSearchText(q);
+    setCategoryId(0);
+  }, [searchParams, setSearchText, setCategoryId]);
 
   return (
     <section>
       <h2 className="text-center">Каталог</h2>
-      <CatalogSearch onSearch={handleSearch} initialQuery={searchQuery} />
-      <Categories
-        onCategorySelect={handleCategorySelect}
-        selectedCategoryId={selectedCategory}
-      />
-      <Catalog url={catalogUrl} />
+      <CatalogSearch />
+      <Categories />
+      <Catalog url={`${baseUrl}/items`} />
     </section>
   );
 };

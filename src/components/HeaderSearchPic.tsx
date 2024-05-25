@@ -5,6 +5,7 @@ import {
   useState,
   FormEvent,
   KeyboardEvent,
+  MouseEvent,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,14 +28,14 @@ const HeaderSearchPic = () => {
     if (inputText.trim()) {
       setSearchText(inputText);
       navigate('/catalog');
-      setInputText('');
+      setInputText(''); // очищаем поле поиска после перехода
       setIsHidden(true);
     } else {
       setIsHidden(true); // Скрыть поле ввода, если текст пуст
     }
   };
 
-  const handleSearch = (event?: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>) => {
+  const handleSearch = (event?: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement> | MouseEvent<HTMLDivElement>) => {
     if (event) {
       event.preventDefault();
     }
