@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 import SearchContext from '../contexts/SearchContext';
 
 interface Category {
@@ -7,10 +8,11 @@ interface Category {
   title: string;
 }
 
-const Categories = () => {
+const CatalogCategories = () => {
   const { categoryId, setCategoryId } = useContext(SearchContext);
   const [categories, setCategories] = useState<Category[]>([]);
   const baseUrl = import.meta.env.VITE_API_URL;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -29,14 +31,19 @@ const Categories = () => {
     fetchCategories();
   }, [baseUrl]);
 
+  const handleClick = (id: number) => {
+    setCategoryId(id);
+    navigate(`/catalog?category=${id}`);
+  };
+
   return (
     <ul className='catalog-categories nav justify-content-center'>
       {categories.map((category) => (
         <li className='nav-item' key={category.id}>
           <Link
-            to={''}
+            to=""
             className={`nav-link ${categoryId === category.id ? 'active' : ''}`}
-            onClick={() => setCategoryId(category.id)}
+            onClick={() => handleClick(category.id)}
           >
             {category.title}
           </Link>
@@ -46,4 +53,4 @@ const Categories = () => {
   );
 };
 
-export default Categories;
+export default CatalogCategories;

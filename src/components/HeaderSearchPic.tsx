@@ -7,30 +7,41 @@ import {
   KeyboardEvent,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import SearchContext from '../contexts/SearchContext';
 
 const HeaderSearchPic = () => {
-  const { searchText, setSearchText } = useContext(SearchContext);
-  const [inputText, setInputText] = useState(searchText);
+  const { setSearchText } = useContext(SearchContext);
+  const [inputText, setInputText] = useState('');
   const [isHidden, setIsHidden] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isHidden) {
       inputRef?.current?.focus();
     }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsHidden(true);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, [isHidden]);
 
   const performSearch = () => {
     if (inputText.trim()) {
       setSearchText(inputText);
-      navigate(`/catalog?q=${inputText}`);
+      navigate('/catalog');
       setInputText(''); // очищаем поле поиска после перехода
-      setIsHidden(true);
-    } else {
-      setIsHidden(true); // Скрыть поле ввода, если текст пуст
     }
+    setIsHidden(true); // Скрыть поле ввода в любом случае
   };
 
   const handleSearch = (event?: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>) => {
@@ -41,15 +52,11 @@ const HeaderSearchPic = () => {
   };
 
   const handleClick = () => {
-    if (!isHidden) {
-      performSearch();
-    } else {
-      setIsHidden(false);
-    }
+    setIsHidden((prevIsHidden) => !prevIsHidden);
   };
 
   return (
-    <>
+    <div ref={containerRef}>
       <div
         id="search-expander"
         className="header-controls-pic header-controls-search"
@@ -72,9 +79,10 @@ const HeaderSearchPic = () => {
               handleSearch(event);
             }
           }}
+          onBlur={() => setIsHidden(true)}
         />
       </form>
-    </>
+    </div>
   );
 };
 
