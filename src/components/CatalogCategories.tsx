@@ -1,17 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import SearchContext from '../contexts/SearchContext';
 
 interface Category {
   id: number;
   title: string;
 }
 
-interface CategoriesProps {
-  onCategorySelect: (categoryId: number) => void;
-  selectedCategoryId: number;
-}
-
-const Categories = ({ onCategorySelect, selectedCategoryId }: CategoriesProps) => {
+const Categories = () => {
+  const { categoryId, setCategoryId } = useContext(SearchContext);
   const [categories, setCategories] = useState<Category[]>([]);
   const baseUrl = import.meta.env.VITE_API_URL;
 
@@ -37,10 +34,9 @@ const Categories = ({ onCategorySelect, selectedCategoryId }: CategoriesProps) =
       {categories.map((category) => (
         <li className='nav-item' key={category.id}>
           <Link
-            to={`#${category.id}`}
-            className={`nav-link ${selectedCategoryId === category.id ? 'active' : ''}`}
-            style={{ padding: 10 }}
-            onClick={() => onCategorySelect(category.id)}
+            to={''}
+            className={`nav-link ${categoryId === category.id ? 'active' : ''}`}
+            onClick={() => setCategoryId(category.id)}
           >
             {category.title}
           </Link>

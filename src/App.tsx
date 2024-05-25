@@ -15,9 +15,15 @@ import ContactsPage from './pages/ContactsPage';
 
 function App() {
   const [searchText, setSearchText] = useState('');
+  const [categoryId, setCategoryId] = useState(0);
 
   return (
-    <SearchContext.Provider value = {{ searchText, setSearchText }}>
+    <SearchContext.Provider value={{
+      searchText,
+      setSearchText,
+      categoryId,
+      setCategoryId,
+    }}>
       <BrowserRouter>
         <Header />
         <main className='container'>
@@ -25,14 +31,14 @@ function App() {
             <div className="col">
               <Banner />
               <Routes>
-                <Route path="/" element={<MainPage/>} />
-                <Route path="/catalog" element={ <CatalogPage /> } />
-                <Route path="/about" element={ <AboutPage /> } />
-                <Route path="/contacts" element={ <ContactsPage /> } />
+                <Route path="/" element={<MainPage />} />
+                <Route path="/catalog" element={<CatalogPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/contacts" element={<ContactsPage />} />
                 <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </div>
-            </div>
+          </div>
         </main>
         <Footer />
       </BrowserRouter>

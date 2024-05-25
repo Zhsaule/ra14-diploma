@@ -27,8 +27,18 @@ const HeaderSearchPic = () => {
     if (inputText.trim()) {
       setSearchText(inputText);
       navigate('/catalog');
+      setInputText('');
       setIsHidden(true);
+    } else {
+      setIsHidden(true); // Скрыть поле ввода, если текст пуст
     }
+  };
+
+  const handleSearch = (event?: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>) => {
+    if (event) {
+      event.preventDefault();
+    }
+    performSearch();
   };
 
   const handleClick = () => {
@@ -36,18 +46,6 @@ const HeaderSearchPic = () => {
       performSearch();
     } else {
       setIsHidden(false);
-    }
-  };
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    performSearch();
-  };
-
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      event.preventDefault(); // предотвращаем отправку формы по Enter
-      performSearch();
     }
   };
 
@@ -61,7 +59,7 @@ const HeaderSearchPic = () => {
       <form
         id="search-form"
         className={`header-controls-search-form form-inline ${isHidden ? 'invisible' : ''}`}
-        onSubmit={handleSubmit}
+        onSubmit={handleSearch}
       >
         <input
           className="form-control"
@@ -70,7 +68,11 @@ const HeaderSearchPic = () => {
           name="search"
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          onKeyDown={handleKeyDown}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter') {
+              handleSearch(event);
+            }
+          }}
         />
       </form>
     </>

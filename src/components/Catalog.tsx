@@ -15,23 +15,27 @@ interface Item {
   images: string[];
 }
 
-interface CatalogProps {
-  url: string;
-}
-
-const Catalog = ({ url }: CatalogProps) => {
+const Catalog = () => {
   const { searchText } = useContext(SearchContext);
+  const { categoryId } = useContext(SearchContext);
   const [items, setItems] = useState<Item[]>([]);
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const baseUrl = import.meta.env.VITE_API_URL;
 
   const fetchData = useCallback(async (newOffset = 0) => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `${url}${url.includes('?') ? '&' : '?'}offset=${newOffset}&q=${searchText}`,
-      );
+      const params = new URLSearchParams({
+        offset: newOffset.toString(),
+        q: searchText,
+      });
+      if (categoryId) {
+        params.append('categoryId', categoryId.toString());
+      }
+
+      const response = await fetch(`${baseUrl}/items?${params.toString()}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -51,14 +55,14 @@ const Catalog = ({ url }: CatalogProps) => {
     } finally {
       setLoading(false);
     }
-  }, [url, searchText]);
+  }, [baseUrl, searchText, categoryId]);
 
   useEffect(() => {
     setItems([]);
     setOffset(0);
     setHasMore(true);
     fetchData(0);
-  }, [url, searchText, fetchData]);
+  }, [baseUrl, searchText, categoryId, fetchData]);
 
   const handleLoadMore = () => {
     fetchData(offset + 6);
