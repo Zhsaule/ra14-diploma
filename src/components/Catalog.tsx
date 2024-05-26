@@ -4,7 +4,7 @@ import {
   useCallback,
   useContext,
 } from 'react';
-
+import { Link } from 'react-router-dom';
 import SearchContext from '../contexts/SearchContext';
 
 interface Item {
@@ -78,7 +78,7 @@ const Catalog = ({ url }: CatalogProps) => {
               <div className='card-body'>
                 <p className='card-text'>{item.title}</p>
                 <p className='card-text'>{item.price}₽</p>
-                <a href="/catalog" className='btn btn-outline-primary'>Заказать</a>
+                <Link to={`/catalog/${item.id}`} className='btn btn-outline-primary'>Заказать</Link>
               </div>
             </div>
           </div>

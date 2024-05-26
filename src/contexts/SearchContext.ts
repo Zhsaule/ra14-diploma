@@ -5,6 +5,9 @@ interface SearchContextType {
   setSearchText: Dispatch<SetStateAction<string>>;
   categoryId: number;
   setCategoryId: Dispatch<SetStateAction<number>>;
+  cartQuantity: number;
+  setCartQuantity: Dispatch<SetStateAction<number>>;
+
 }
 
 const SearchContext = createContext<SearchContextType>({
@@ -12,6 +15,8 @@ const SearchContext = createContext<SearchContextType>({
   setSearchText: () => {},
   categoryId: 0,
   setCategoryId: () => {},
+  cartQuantity: 0,
+  setCartQuantity: () => {},
 });
 
 export default SearchContext;
