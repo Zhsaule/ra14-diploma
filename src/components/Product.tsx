@@ -11,6 +11,7 @@ const Product = () => {
   const { setCartQuantity } = useContext(CartContext);
   const [item, setItem] = useState<ItemData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null); // Добавляем состояние для ошибки
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
 
@@ -21,8 +22,8 @@ const Product = () => {
           setItem(response.data);
           setLoading(false);
         })
-        .catch((error) => {
-          console.error('Error loading item data:', error);
+        .catch((err) => {
+          setError(`${err}. Ошибка при загрузке данных о товаре. Попробуйте еще раз.`);
           setLoading(false);
         });
     }
@@ -52,8 +53,7 @@ const Product = () => {
       }
 
       localStorage.setItem('cart', JSON.stringify(cart));
-      setCartQuantity(cart.length); // Устанавливаем количество уникальных позиций
-      // console.log(cart.length);
+      setCartQuantity(cart.length);
       navigate('/cart');
     }
   };
@@ -62,8 +62,12 @@ const Product = () => {
     return <div>Loading...</div>;
   }
 
+  if (error) {
+    return <div className="alert alert-danger">{error}</div>;
+  }
+
   if (!item) {
-    return <div>Error loading item data.</div>;
+    return <div>Ошибка при загрузке данных о товаре.</div>;
   }
 
   const availableSizes = item.sizes.filter((size) => size.available);

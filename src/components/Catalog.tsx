@@ -15,10 +15,12 @@ const Catalog = ({ url }: UrlProps) => {
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const baseUrl = import.meta.env.VITE_API_URL;
 
   const fetchData = useCallback(async (newOffset = 0) => {
     setLoading(true);
+    setError(null);
     try {
       const params = new URLSearchParams({
         offset: newOffset.toString(),
@@ -40,8 +42,8 @@ const Catalog = ({ url }: UrlProps) => {
       }
       setItems((prevItems) => (newOffset === 0 ? data : [...prevItems, ...data]));
       setOffset(newOffset);
-    } catch (error) {
-      console.error('There was a problem with fetch operation:', error);
+    } catch (err) {
+      setError('Ошибка при загрузке данных. Попробуйте еще раз.');
     } finally {
       setLoading(false);
     }
@@ -75,6 +77,7 @@ const Catalog = ({ url }: UrlProps) => {
         ))}
       </div>
       {loading && <div>Loading...</div>}
+      {error && <div className="alert alert-danger">{error}</div>}
       {hasMore && !loading && (
         <div className='text-center'>
           <button className='btn btn-outline-primary' onClick={handleLoadMore}>Загрузить еще</button>

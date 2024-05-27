@@ -39,9 +39,9 @@ const HeaderSearchPic = () => {
     if (inputText.trim()) {
       setSearchText(inputText);
       navigate('/catalog');
-      setInputText(''); // очищаем поле поиска после перехода
+      setInputText('');
     }
-    setIsHidden(true); // Скрыть поле ввода в любом случае
+    setIsHidden(true);
   };
 
   const handleSearch = (event?: FormEvent<HTMLFormElement> | KeyboardEvent<HTMLInputElement>) => {

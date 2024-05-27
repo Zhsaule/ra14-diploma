@@ -11,11 +11,15 @@ interface Category {
 const CatalogCategories = () => {
   const { categoryId, setCategoryId } = useContext(SearchContext);
   const [categories, setCategories] = useState<Category[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const baseUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCategories = async () => {
+      setError(null);
+      setLoading(true);
       try {
         const response = await fetch(`${baseUrl}/categories`);
         if (!response.ok) {
@@ -23,8 +27,10 @@ const CatalogCategories = () => {
         }
         const data: Category[] = await response.json();
         setCategories([{ id: 0, title: 'Все' }, ...data]);
-      } catch (error) {
-        console.error('There was a problem with fetch operation:', error);
+      } catch (err) {
+        setError('Ошибка при загрузке категорий. Попробуйте еще раз.');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -37,19 +43,25 @@ const CatalogCategories = () => {
   };
 
   return (
-    <ul className='catalog-categories nav justify-content-center'>
-      {categories.map((category) => (
-        <li className='nav-item' key={category.id}>
-          <Link
-            to=""
-            className={`nav-link ${categoryId === category.id ? 'active' : ''}`}
-            onClick={() => handleClick(category.id)}
-          >
-            {category.title}
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <>
+      {loading && <div>Загрузка...</div>}
+      {error && <div className="alert alert-danger">{error}</div>}
+      {!loading && !error && (
+        <ul className='catalog-categories nav justify-content-center'>
+          {categories.map((category) => (
+            <li className='nav-item' key={category.id}>
+              <Link
+                to=""
+                className={`nav-link ${categoryId === category.id ? 'active' : ''}`}
+                onClick={() => handleClick(category.id)}
+              >
+                {category.title}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
   );
 };
 

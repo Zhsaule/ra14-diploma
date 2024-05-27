@@ -8,10 +8,12 @@ const CartOrder = () => {
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setLoading(true);
+    setError(null);
 
     const cartItems = JSON.parse(localStorage.getItem('cart') || '[]').map((item: CartItem) => ({
       id: item.id,
@@ -31,8 +33,8 @@ const CartOrder = () => {
       await axios.post('http://localhost:7070/api/order', order);
       setSuccess(true);
       localStorage.removeItem('cart');
-    } catch (error) {
-      console.error('Order submission failed', error);
+    } catch (err) {
+      setError('Ошибка при оформлении заказа. Попробуйте еще раз.');
     } finally {
       setLoading(false);
     }
@@ -46,6 +48,7 @@ const CartOrder = () => {
           <p>Ваш заказ успешно оформлен!</p>
         ) : (
           <form className='card-body' onSubmit={handleSubmit}>
+            {error && <div className="alert alert-danger">{error}</div>}
             <div className='form-group'>
               <label htmlFor='phone'>Телефон</label>
               <input

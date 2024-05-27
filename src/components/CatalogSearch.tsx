@@ -6,7 +6,6 @@ const CatalogSearch = () => {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // You might need to call some search function here if necessary
   };
 
   return (
