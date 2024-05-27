@@ -1,13 +1,15 @@
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import CartContext from '../contexts/CartContext';
 
 function HeaderCartPic() {
-  const cartCount: number = 0;
+  const { cartQuantity } = useContext(CartContext);
 
   return (
-    <Link to="/cart" >
-    <div className="header-controls-pic header-controls-cart">
-      { (cartCount > 0) && <div className="header-controls-cart-full">{cartCount}</div> }
-    </div>
+    <Link to="/cart">
+      <div className="header-controls-pic header-controls-cart">
+        { (cartQuantity > 0) && <div className="header-controls-cart-full">{cartQuantity}</div> }
+      </div>
     </Link>
   );
 }

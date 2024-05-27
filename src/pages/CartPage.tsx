@@ -1,7 +1,13 @@
 import Cart from '../components/Cart';
+import CartOrder from '../components/CartOrder';
 
-const CartPage = () => {
-  <Cart />;
-};
+function CartPage() {
+  return (
+    <div className="container">
+      <Cart />
+      <CartOrder />
+    </div>
+  );
+}
 
 export default CartPage;

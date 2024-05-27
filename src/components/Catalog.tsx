@@ -5,21 +5,11 @@ import {
   useContext,
 } from 'react';
 import { Link } from 'react-router-dom';
+
 import SearchContext from '../contexts/SearchContext';
+import { Item, UrlProps } from '../types';
 
-interface Item {
-  id: number;
-  category: number;
-  title: string;
-  price: number;
-  images: string[];
-}
-
-interface CatalogProps {
-  url?: string;
-}
-
-const Catalog = ({ url }: CatalogProps) => {
+const Catalog = ({ url }: UrlProps) => {
   const { searchText, categoryId } = useContext(SearchContext);
   const [items, setItems] = useState<Item[]>([]);
   const [offset, setOffset] = useState(0);
@@ -78,7 +68,7 @@ const Catalog = ({ url }: CatalogProps) => {
               <div className='card-body'>
                 <p className='card-text'>{item.title}</p>
                 <p className='card-text'>{item.price}₽</p>
-                <Link to={`/catalog/${item.id}`} className='btn btn-outline-primary'>Заказать</Link>
+                <Link to={`/product/${item.id}`} className='btn btn-outline-primary'>Заказать</Link>
               </div>
             </div>
           </div>

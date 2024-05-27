@@ -1,7 +1,11 @@
 import Product from '../components/Product';
 
-const ProductPage = () => {
-  <Product />;
-};
+function ProductPage() {
+  return (
+    <>
+      <Product />;
+    </>
+  );
+}
 
 export default ProductPage;

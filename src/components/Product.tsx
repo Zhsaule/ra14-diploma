@@ -1,24 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-interface ItemData {
-  id: number;
-  title: string;
-  description: string;
-  images: string[];
-  sku: string;
-  manufacturer: string;
-  color: string;
-  material: string;
-  season: string;
-  reason: string;
-  sizes: { size: string; available: boolean }[];
-}
+import CartContext from '../contexts/CartContext';
+import { CartItem, ItemData } from '../types';
 
 const Product = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { setCartQuantity } = useContext(CartContext);
   const [item, setItem] = useState<ItemData | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
@@ -43,7 +33,27 @@ const Product = () => {
   };
 
   const handleAddToCart = () => {
-    if (selectedSize) {
+    if (selectedSize && item) {
+      const cart: CartItem[] = JSON.parse(localStorage.getItem('cart') || '[]');
+      const itemInCart = cart.find(
+        (cartItem) => cartItem.id === item.id && cartItem.size === selectedSize,
+      );
+
+      if (itemInCart) {
+        itemInCart.quantity += quantity;
+      } else {
+        cart.push({
+          id: item.id,
+          title: item.title,
+          size: selectedSize,
+          quantity,
+          price: item.price,
+        });
+      }
+
+      localStorage.setItem('cart', JSON.stringify(cart));
+      setCartQuantity(cart.length); // Устанавливаем количество уникальных позиций
+      // console.log(cart.length);
       navigate('/cart');
     }
   };
@@ -60,13 +70,13 @@ const Product = () => {
 
   return (
     <section className="catalog-item">
-      <h2 className='text-center'>{item.title}</h2>
-      <div className='row'>
-        <div className='col-5'>
-          <img src={item.images[0]} className='img-fluid' alt={item.title} />
+      <h2 className="text-center">{item.title}</h2>
+      <div className="row">
+        <div className="col-5">
+          <img src={item.images[0]} className="img-fluid" alt={item.title} />
         </div>
-        <div className='col-7'>
-          <table className='table table-bordered'>
+        <div className="col-7">
+          <table className="table table-bordered">
             <tbody>
               <tr>
                 <td>Артикул</td>
@@ -94,7 +104,7 @@ const Product = () => {
               </tr>
             </tbody>
           </table>
-          <div className='text-center'>
+          <div className="text-center">
             <p>Размеры в наличии
               {availableSizes.map((size) => (
                 <span className="catalog-item-size selected" key={size.size}>
@@ -108,17 +118,26 @@ const Product = () => {
               ))}
             </p>
             <p>Количество:
-              <span className='btn-group btn-group-sm pl-2'>
-                <button className='btn btn-secondary'
-                 onClick={() => setQuantity(Math.max(1, quantity - 1))}>-</button>
-                <span className='btn btn-outline-primary'>{quantity}</span>
-                <button className='btn btn-secondary'
-                  onClick={() => setQuantity(Math.min(10, quantity + 1))}>+</button>
-            </span>
+              <span className="btn-group btn-group-sm pl-2">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                >
+                  -
+                </button>
+                <span className="btn btn-outline-primary">{quantity}</span>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setQuantity(Math.min(10, quantity + 1))}
+                >
+                  +
+                </button>
+              </span>
             </p>
           </div>
           {availableSizes.length > 0 && (
-            <button className='btn btn-danger btn-block btn-lg'
+            <button
+              className="btn btn-danger btn-block btn-lg"
               onClick={handleAddToCart}
               disabled={!selectedSize}
             >
