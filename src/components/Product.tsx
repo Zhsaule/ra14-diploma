@@ -107,13 +107,12 @@ const Product = () => {
           <div className="text-center">
             <p>Размеры в наличии
               {availableSizes.map((size) => (
-                <span className="catalog-item-size selected" key={size.size}>
-                  <button
-                    onClick={() => handleSizeSelect(size.size)}
-                    className={size.size === selectedSize ? 'selected' : ''}
-                  >
-                    {size.size}
-                  </button>
+                <span
+                  key={size.size}
+                  onClick={() => handleSizeSelect(size.size)}
+                  className={`catalog-item-size ${size.size === selectedSize ? 'selected' : ''}`}
+                >
+                  {size.size}
                 </span>
               ))}
             </p>
