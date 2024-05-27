@@ -1,9 +1,11 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, SyntheticEvent } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import CartContext from '../contexts/CartContext';
 import { CartItem, ItemData } from '../types';
+
+import err404 from '../img/404.png';
 
 const Product = () => {
   const { id } = useParams<{ id: string }>();
@@ -11,7 +13,7 @@ const Product = () => {
   const { setCartQuantity } = useContext(CartContext);
   const [item, setItem] = useState<ItemData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null); // Добавляем состояние для ошибки
+  const [error, setError] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
 
@@ -58,6 +60,10 @@ const Product = () => {
     }
   };
 
+  const handleImageError = (event: SyntheticEvent<HTMLImageElement, Event>) => {
+    event.currentTarget.src = err404;
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -77,7 +83,12 @@ const Product = () => {
       <h2 className="text-center">{item.title}</h2>
       <div className="row">
         <div className="col-5">
-          <img src={item.images[0]} className="img-fluid" alt={item.title} />
+          <img
+            src={item.images[0]}
+            className="img-fluid"
+            alt={item.title}
+            onError={handleImageError}
+          />
         </div>
         <div className="col-7">
           <table className="table table-bordered">

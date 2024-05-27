@@ -3,11 +3,14 @@ import {
   useEffect,
   useCallback,
   useContext,
+  SyntheticEvent,
 } from 'react';
 import { Link } from 'react-router-dom';
 
 import SearchContext from '../contexts/SearchContext';
 import { Item, UrlProps } from '../types';
+
+import err404 from '../img/404.png';
 
 const Catalog = ({ url }: UrlProps) => {
   const { searchText, categoryId } = useContext(SearchContext);
@@ -60,13 +63,22 @@ const Catalog = ({ url }: UrlProps) => {
     fetchData(offset + 6);
   };
 
+  const handleImageError = (event: SyntheticEvent<HTMLImageElement, Event>) => {
+    event.currentTarget.src = err404;
+  };
+
   return (
     <>
       <div className='row'>
         {items.map((item) => (
           <div className='col-4' key={item.id}>
             <div className='card catalog-item-card'>
-              <img className='card-img-top img-fluid' src={item.images[0]} alt={item.title} />
+              <img 
+                className='card-img-top img-fluid' 
+                src={item.images[0]} 
+                alt={item.title} 
+                onError={handleImageError}
+              />
               <div className='card-body'>
                 <p className='card-text'>{item.title}</p>
                 <p className='card-text'>{item.price}₽</p>

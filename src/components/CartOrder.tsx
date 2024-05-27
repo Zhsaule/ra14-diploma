@@ -1,9 +1,11 @@
-import { useState, FormEvent } from 'react';
+import { useContext, useState, FormEvent } from 'react';
 import axios from 'axios';
 
 import { CartItem } from '../types';
+import CartContext from '../contexts/CartContext';
 
 const CartOrder = () => {
+  const { setCartQuantity } = useContext(CartContext);
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
@@ -33,6 +35,7 @@ const CartOrder = () => {
       await axios.post('http://localhost:7070/api/order', order);
       setSuccess(true);
       localStorage.removeItem('cart');
+      setCartQuantity(0);
     } catch (err) {
       setError('Ошибка при оформлении заказа. Попробуйте еще раз.');
     } finally {
