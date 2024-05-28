@@ -29,10 +29,10 @@ const fortune = (ctx, body = null, status = 200) => {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             // Uncomment for error generation
-            // if (Math.random() > 0.8) {
-            //     reject(new Error('Something bad happened'));
-            //     return;
-            // }
+            if (Math.random() > 0.8) {
+                reject(new Error('Something bad happened'));
+                return;
+            }
 
             ctx.response.status = status;
             ctx.response.body = body;
@@ -85,6 +85,7 @@ router.get('/api/items/:id', async (ctx, next) => {
 
 router.post('/api/order', async (ctx, next) => {
     const { owner: { phone, address }, items } = ctx.request.body;
+    console.log('Received order:', ctx.request.body);
     if (typeof phone !== 'string') {
         return fortune(ctx, 'Bad Request: Phone', 400);
     }
@@ -112,9 +113,11 @@ router.post('/api/order', async (ctx, next) => {
     return fortune(ctx, null, 204);
 });
 
-app.use(router.routes())
+app.use(router.routes());
 app.use(router.allowedMethods());
 
 const port = process.env.PORT || 7070;
 const server = http.createServer(app.callback());
-server.listen(port);
+server.listen(port, () => {
+    console.log(`Server is running on port ${port}!!!`);
+});

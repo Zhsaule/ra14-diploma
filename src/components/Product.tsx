@@ -1,4 +1,9 @@
-import { useState, useEffect, useContext, SyntheticEvent } from 'react';
+import {
+  useState,
+  useEffect,
+  useContext,
+  SyntheticEvent,
+} from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -61,11 +66,12 @@ const Product = () => {
   };
 
   const handleImageError = (event: SyntheticEvent<HTMLImageElement, Event>) => {
-    event.currentTarget.src = err404;
+    const target = event.currentTarget;
+    target.src = err404;
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Загрузка карточки товара...</div>;
   }
 
   if (error) {

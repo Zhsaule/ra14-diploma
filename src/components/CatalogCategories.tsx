@@ -44,7 +44,7 @@ const CatalogCategories = () => {
 
   return (
     <>
-      {loading && <div>Загрузка...</div>}
+      {loading && <div>Загрузка категорий...</div>}
       {error && <div className="alert alert-danger">{error}</div>}
       {!loading && !error && (
         <ul className='catalog-categories nav justify-content-center'>

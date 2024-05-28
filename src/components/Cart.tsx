@@ -1,19 +1,16 @@
 import { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import CartContext from '../contexts/CartContext';
-
 import { CartItem } from '../types';
 
 const Cart = () => {
-  const { setCartQuantity } = useContext(CartContext);
+  const { cartQuantity, setCartQuantity } = useContext(CartContext);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    const items = JSON.parse(localStorage.getItem('cart') || '[]');
+    const items: CartItem[] = JSON.parse(localStorage.getItem('cart') || '[]');
     setCartItems(items);
-    setCartQuantity(items.length);
-  }, [setCartQuantity]);
+  }, [cartQuantity]);
 
   const handleRemove = (index: number) => {
     const updatedCart = [...cartItems];

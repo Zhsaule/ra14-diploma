@@ -1,11 +1,10 @@
 import { useContext, useState, FormEvent } from 'react';
-import axios from 'axios';
-
+import axios, { AxiosError } from 'axios';
 import { CartItem } from '../types';
 import CartContext from '../contexts/CartContext';
 
 const CartOrder = () => {
-  const { setCartQuantity } = useContext(CartContext);
+  const { cartQuantity, setCartQuantity } = useContext(CartContext);
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [loading, setLoading] = useState(false);
@@ -17,7 +16,14 @@ const CartOrder = () => {
     setLoading(true);
     setError(null);
 
-    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]').map((item: CartItem) => ({
+    if (cartQuantity === 0) {
+      setError('Нет данных для отправки.');
+      setLoading(false);
+      return;
+    }
+
+    const cartItems: CartItem[] = JSON.parse(localStorage.getItem('cart') || '[]');
+    const formattedItems = cartItems.map((item) => ({
       id: item.id,
       price: item.price,
       count: item.quantity,
@@ -28,7 +34,7 @@ const CartOrder = () => {
         phone,
         address,
       },
-      items: cartItems,
+      items: formattedItems,
     };
 
     try {
@@ -37,7 +43,8 @@ const CartOrder = () => {
       localStorage.removeItem('cart');
       setCartQuantity(0);
     } catch (err) {
-      setError('Ошибка при оформлении заказа. Попробуйте еще раз.');
+      const axiosError = err as AxiosError;
+      setError(axiosError.response?.data ? `Ошибка: ${axiosError.response.data}` : 'Ошибка при оформлении заказа. Попробуйте еще раз.');
     } finally {
       setLoading(false);
     }
@@ -48,7 +55,7 @@ const CartOrder = () => {
       <h2 className="text-center">Оформить заказ</h2>
       <div className='card' style={{ maxWidth: '30rem', margin: '0 auto' }}>
         {success ? (
-          <p>Ваш заказ успешно оформлен!</p>
+          <p className='text-center'>Ваш заказ успешно оформлен!</p>
         ) : (
           <form className='card-body' onSubmit={handleSubmit}>
             {error && <div className="alert alert-danger">{error}</div>}
@@ -80,7 +87,7 @@ const CartOrder = () => {
                 Согласен с правилами доставки
               </label>
             </div>
-            <button type="submit" className="btn btn-outline-secondary" disabled={loading}>
+            <button type="submit" className="btn btn-outline-secondary" disabled={loading || cartQuantity === 0}>
               {loading ? 'Оформление...' : 'Оформить'}
             </button>
           </form>

@@ -2,9 +2,9 @@ import Product from '../components/Product';
 
 function ProductPage() {
   return (
-    <>
-      <Product />;
-    </>
+    <div className='container'>
+      <Product />
+    </div>
   );
 }
 
