@@ -55,7 +55,9 @@ const CartOrder = () => {
       <h2 className="text-center">Оформить заказ</h2>
       <div className='card' style={{ maxWidth: '30rem', margin: '0 auto' }}>
         {success ? (
-          <p className='text-center'>Ваш заказ успешно оформлен!</p>
+          <div className='col-12'>
+            <p className='text-center'>Ваш заказ успешно оформлен!</p>
+          </div>
         ) : (
           <form className='card-body' onSubmit={handleSubmit}>
             {error && <div className="alert alert-danger">{error}</div>}

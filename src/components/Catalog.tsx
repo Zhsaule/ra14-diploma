@@ -63,6 +63,10 @@ const Catalog = ({ url }: UrlProps) => {
     fetchData(offset + 6);
   };
 
+  const handleRetry = () => {
+    fetchData(offset); // Повторная попытка с текущим смещением
+  };
+
   const handleImageError = (event: SyntheticEvent<HTMLImageElement, Event>) => {
     const target = event.currentTarget;
     target.src = err404;
@@ -71,6 +75,11 @@ const Catalog = ({ url }: UrlProps) => {
   return (
     <>
       <div className='row'>
+        {items.length === 0 && !loading && !error && (
+          <div className='col-12'>
+            <p className='text-center'>Товары не найдены</p>
+          </div>
+        )}
         {items.map((item) => (
           <div className='col-4' key={item.id}>
             <div className='card catalog-item-card'>
@@ -90,8 +99,13 @@ const Catalog = ({ url }: UrlProps) => {
         ))}
       </div>
       {loading && <div>Загрузка каталога...</div>}
-      {error && <div className="alert alert-danger">{error}</div>}
-      {hasMore && !loading && (
+      {error && (
+        <div className="alert alert-danger">
+          {error}
+          <button className='btn btn-outline-primary' onClick={handleRetry}>Повторить</button>
+        </div>
+      )}
+      {hasMore && !loading && items.length > 0 && (
         <div className='text-center'>
           <button className='btn btn-outline-primary' onClick={handleLoadMore}>Загрузить еще</button>
         </div>

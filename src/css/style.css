@@ -189,11 +189,13 @@ section {
 
 .catalog-item-size {
   display: inline-block;
+  margin: 5px;
   padding: 0 10px;
 }
 
 .catalog-item-size.selected {
   background: #727e86;
+  margin: 5px;
   border-radius: 15px;
   color: #fff;
 }

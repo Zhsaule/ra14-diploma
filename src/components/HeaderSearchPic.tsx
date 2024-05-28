@@ -7,7 +7,6 @@ import {
   KeyboardEvent,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import SearchContext from '../contexts/SearchContext';
 
 const HeaderSearchPic = () => {
@@ -52,7 +51,11 @@ const HeaderSearchPic = () => {
   };
 
   const handleClick = () => {
-    setIsHidden((prevIsHidden) => !prevIsHidden);
+    if (!isHidden && inputText.trim()) {
+      performSearch();
+    } else {
+      setIsHidden((prevIsHidden) => !prevIsHidden);
+    }
   };
 
   return (
@@ -79,7 +82,6 @@ const HeaderSearchPic = () => {
               handleSearch(event);
             }
           }}
-          onBlur={() => setIsHidden(true)}
         />
       </form>
     </div>

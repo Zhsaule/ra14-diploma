@@ -3,6 +3,7 @@ import {
   useEffect,
   useContext,
   SyntheticEvent,
+  useCallback,
 } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -22,19 +23,24 @@ const Product = () => {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
 
-  useEffect(() => {
+  const fetchData = useCallback(async () => {
     if (id) {
-      axios.get(`http://localhost:7070/api/items/${id}`)
-        .then((response) => {
-          setItem(response.data);
-          setLoading(false);
-        })
-        .catch((err) => {
-          setError(`${err}. Ошибка при загрузке данных о товаре. Попробуйте еще раз.`);
-          setLoading(false);
-        });
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await axios.get(`http://localhost:7070/api/items/${id}`);
+        setItem(response.data);
+      } catch (err) {
+        setError(`${err}. Ошибка при загрузке данных о товаре. Попробуйте еще раз.`);
+      } finally {
+        setLoading(false);
+      }
     }
   }, [id]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleSizeSelect = (size: string) => {
     setSelectedSize(size);
@@ -75,7 +81,12 @@ const Product = () => {
   }
 
   if (error) {
-    return <div className="alert alert-danger">{error}</div>;
+    return (
+      <div className="alert alert-danger">
+        {error}
+        <button className='btn btn-outline-primary' onClick={fetchData}>Повторить</button>
+      </div>
+    );
   }
 
   if (!item) {
