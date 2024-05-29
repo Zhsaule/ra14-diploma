@@ -46,7 +46,8 @@ const Catalog = ({ url }: UrlProps) => {
       setItems((prevItems) => (newOffset === 0 ? data : [...prevItems, ...data]));
       setOffset(newOffset);
     } catch (err) {
-      setError('Ошибка при загрузке данных. Попробуйте еще раз.');
+      // setError('Ошибка при загрузке данных. Попробуйте еще раз.');
+      setError(`${err}. Ошибка при загрузке данных о товаре. Попробуйте еще раз.`);
     } finally {
       setLoading(false);
     }

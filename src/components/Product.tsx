@@ -22,13 +22,14 @@ const Product = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const baseUrl = import.meta.env.VITE_API_URL;
 
   const fetchData = useCallback(async () => {
     if (id) {
       setLoading(true);
       setError(null);
       try {
-        const response = await axios.get(`http://localhost:7070/api/items/${id}`);
+        const response = await axios.get(`${baseUrl}/items/${id}`);
         setItem(response.data);
       } catch (err) {
         setError(`${err}. Ошибка при загрузке данных о товаре. Попробуйте еще раз.`);
