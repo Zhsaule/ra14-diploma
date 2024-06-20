@@ -100,6 +100,12 @@ section {
   position: relative;
 }
 
+@media (max-width: 768px) {
+  .banner-header {
+    display: none; /* или любые другие стили для мобильных устройств */
+  }
+}
+
 .banner-header {
   position: absolute;
   z-index: 5;
